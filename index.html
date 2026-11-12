@@ -1,0 +1,499 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#f8e9e9">
+<title>A Letter for Sikriti</title>
+
+<style>
+:root {
+  --ink: #492d38;
+  --muted: #806875;
+  --rose: #b75f78;
+  --rose-dark: #91465e;
+  --paper: #fffaf6;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Georgia, "Times New Roman", serif;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 15% 15%, #fff7f3 0, transparent 30%),
+    linear-gradient(135deg, #f8e8e9, #f6e2e5 55%, #fdf2eb);
+  overflow-x: hidden;
+}
+
+.glow {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(#fff 1px, transparent 1px);
+  background-size: 34px 34px;
+  opacity: .35;
+}
+
+.wrap {
+  width: min(920px, 92vw);
+  margin: auto;
+  padding: 58px 0 42px;
+  position: relative;
+}
+
+.eyebrow {
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: .24em;
+  font: 600 11px Arial, sans-serif;
+  color: var(--rose);
+  margin-bottom: 16px;
+}
+
+h1 {
+  text-align: center;
+  font-weight: 400;
+  font-size: clamp(2.4rem, 7vw, 4.6rem);
+  line-height: 1.05;
+  margin: 0;
+  color: #603b49;
+}
+
+.subtitle {
+  text-align: center;
+  color: var(--muted);
+  font: 14px/1.7 Arial, sans-serif;
+  margin: 17px auto 35px;
+  max-width: 500px;
+}
+
+.envelope-area {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto 26px;
+  perspective: 900px;
+}
+
+.envelope {
+  position: relative;
+  width: min(360px, 82vw);
+  height: 220px;
+  background: #e7b9c2;
+  border-radius: 8px;
+  box-shadow: 0 18px 45px #8d53622b;
+  cursor: pointer;
+  transition: transform .35s;
+}
+
+.envelope:hover {
+  transform: translateY(-4px);
+}
+
+.envelope:before,
+.envelope:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 8px;
+}
+
+.envelope:before {
+  background: linear-gradient(145deg, #f3d0d4, #d993a4);
+  clip-path: polygon(0 0, 50% 58%, 100% 0, 100% 100%, 0 100%);
+  z-index: 3;
+}
+
+.flap {
+  position: absolute;
+  inset: 0;
+  background: #d58fa0;
+  clip-path: polygon(0 0, 100% 0, 50% 63%);
+  transform-origin: top;
+  transition: transform .8s;
+  z-index: 4;
+  border-radius: 8px;
+}
+
+.seal {
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  top: 55%;
+  transform: translate(-50%, -50%);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #a84f69;
+  color: white;
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  box-shadow: 0 3px 9px #70384b55;
+  transition: opacity .3s;
+}
+
+.letter-peek {
+  position: absolute;
+  left: 7%;
+  right: 7%;
+  bottom: 10px;
+  height: 175px;
+  background: var(--paper);
+  border-radius: 4px;
+  transition: transform .8s;
+  z-index: 2;
+  box-shadow: 0 2px 8px #74424a22;
+}
+
+.envelope.open .flap {
+  transform: rotateX(180deg);
+  z-index: 1;
+}
+
+.envelope.open .letter-peek {
+  transform: translateY(-100px);
+}
+
+.envelope.open .seal {
+  opacity: 0;
+}
+
+.tap {
+  text-align: center;
+  font: 12px Arial, sans-serif;
+  color: #946d79;
+  margin-top: 11px;
+}
+
+.letter {
+  background: var(--paper);
+  max-width: 720px;
+  margin: 34px auto 0;
+  padding: clamp(27px, 6vw, 58px);
+  border: 1px solid #f1dfe0;
+  box-shadow: 0 22px 70px #8d53621a;
+  position: relative;
+  opacity: 0;
+  transform: translateY(18px);
+  max-height: 0;
+  overflow: hidden;
+  transition: opacity .8s, transform .8s, max-height 1s;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.letter.show {
+  opacity: 1;
+  transform: translateY(0);
+  max-height: 1800px;
+  padding-top: clamp(27px, 6vw, 58px);
+  padding-bottom: clamp(27px, 6vw, 58px);
+}
+
+.letter:before {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border: 1px solid #f3e4e2;
+  pointer-events: none;
+}
+
+.date {
+  font: 11px Arial, sans-serif;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: #ad8490;
+  text-align: right;
+  margin-bottom: 28px;
+}
+
+.salutation {
+  font-size: 25px;
+  margin-bottom: 22px;
+}
+
+.letter p {
+  font-size: clamp(16px, 2vw, 18px);
+  line-height: 1.9;
+  color: #624954;
+  margin: 0 0 17px;
+}
+
+.letter p.emphasis {
+  color: #8f435d;
+  font-style: italic;
+}
+
+.signature {
+  margin-top: 30px;
+  font-size: 22px;
+  line-height: 1.7;
+}
+
+.signature span {
+  display: block;
+  font: 12px Arial, sans-serif;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #a47c87;
+  margin-top: 5px;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 27px 0 0;
+}
+
+button {
+  border: 0;
+  border-radius: 999px;
+  padding: 13px 22px;
+  font: 600 12px Arial, sans-serif;
+  letter-spacing: .06em;
+  cursor: pointer;
+  transition: transform .2s, background .2s;
+}
+
+button:hover {
+  transform: translateY(-2px);
+}
+
+.primary {
+  background: var(--rose);
+  color: white;
+  box-shadow: 0 7px 18px #b75f7833;
+}
+
+.note {
+  text-align: center;
+  font: 12px/1.7 Arial, sans-serif;
+  color: #947783;
+  margin: 24px auto 0;
+  max-width: 510px;
+}
+
+.footer {
+  text-align: center;
+  font: 11px Arial, sans-serif;
+  color: #a88791;
+  margin-top: 45px;
+  letter-spacing: .08em;
+}
+
+.heart {
+  position: fixed;
+  bottom: -30px;
+  color: #c8798d;
+  opacity: 0;
+  pointer-events: none;
+  animation: float 5s linear forwards;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0) rotate(0);
+    opacity: 0;
+  }
+  15% { opacity: .7; }
+  100% {
+    transform: translateY(-110vh) rotate(35deg);
+    opacity: 0;
+  }
+}
+
+@media(max-width:520px) {
+  .wrap { padding-top: 42px; }
+  .envelope { height: 190px; }
+  .letter { margin-top: 22px; }
+  .letter:before { inset: 8px; }
+}
+
+@media(prefers-reduced-motion:reduce) {
+  *, *:before, *:after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="glow"></div>
+
+<main class="wrap">
+
+  <div class="eyebrow">Something I needed to say</div>
+
+  <h1>
+    For Sikriti,<br>
+    with all my heart.
+  </h1>
+
+  <p class="subtitle">
+    A letter written with honesty, regret, and the hope that
+    you’ll understand what’s in my heart.
+  </p>
+
+  <div class="envelope-area">
+    <div class="envelope"
+         id="envelope"
+         role="button"
+         tabindex="0"
+         aria-label="Open the letter">
+
+      <div class="letter-peek"></div>
+      <div class="flap"></div>
+      <div class="seal">♥</div>
+
+    </div>
+  </div>
+
+  <div class="tap" id="tapText">
+    Tap the envelope to open your letter
+  </div>
+
+  <article class="letter" id="letter">
+
+    <div class="date">A letter from my heart</div>
+
+    <div class="salutation">My dearest Sikriti,</div>
+
+    <p>
+      I’ve been thinking a lot about what happened, and I don’t
+      want to hide behind excuses or try to make my mistake sound
+      smaller than it was. I lied to you about my past, and I
+      understand that this hurt you deeply.
+    </p>
+
+    <p>
+      You trusted me, and I should have respected that trust by
+      being honest with you from the beginning. I can understand
+      why you feel hurt, disappointed, and perhaps unsure about
+      what to believe now. You had every right to expect honesty
+      from me. I’m truly sorry that my actions made you question that.
+    </p>
+
+    <p>
+      I made a big mistake. I know saying “I’m sorry” cannot undo
+      it, and I don’t expect a few words to repair the hurt I caused.
+      I’m not asking you to forget what happened or to pretend that
+      everything is okay. I want to take responsibility for it and
+      show you, through my actions, that I can be more honest, open,
+      and deserving of your trust.
+    </p>
+
+    <p class="emphasis">
+      I love you, Sikriti. Not just because I miss having you beside
+      me, but because you matter to me as a person. I want to be with
+      you, share the ordinary days and the difficult ones, and build
+      something where you never have to doubt my honesty.
+    </p>
+
+    <p>
+      I want another chance—not because I think I’m entitled to one,
+      but because I genuinely want to rectify what I’ve done. If
+      you’re willing, I want to listen to everything you feel, answer
+      your questions truthfully, and give you the time and space you
+      need. I know rebuilding trust will take patience and consistent
+      actions, not promises made in one letter.
+    </p>
+
+    <p>
+      I also understand that the decision is yours. I won’t pressure
+      you or rush you. Whatever you need right now, I will respect it.
+      I only hope that, someday, my actions can help you feel safe
+      with me again.
+    </p>
+
+    <p class="emphasis">
+      I am sorry for hurting you. I love you, and I wish I had handled
+      things differently. I want to make things right, one honest
+      step at a time.
+    </p>
+
+    <div class="signature">
+      With sincere apology,
+      <span>Safalya</span>
+    </div>
+
+  </article>
+
+  <div class="actions">
+    <button class="primary" id="openBtn">
+      Open my letter
+    </button>
+  </div>
+
+  <p class="note">
+    This isn’t a request for an immediate answer. It’s simply my
+    way of taking responsibility and telling you how much you mean
+    to me.
+  </p>
+
+  <div class="footer">
+    MADE WITH HONESTY · FOR SIKRITI
+  </div>
+
+</main>
+
+<script>
+const envelope = document.getElementById('envelope');
+const letter = document.getElementById('letter');
+const tapText = document.getElementById('tapText');
+
+function openLetter() {
+  envelope.classList.add('open');
+  letter.classList.add('show');
+
+  tapText.textContent = 'A few words I wanted you to read';
+
+  setTimeout(() => {
+    letter.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
+  }, 250);
+
+  hearts();
+}
+
+envelope.addEventListener('click', openLetter);
+
+envelope.addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    openLetter();
+  }
+});
+
+document.getElementById('openBtn')
+  .addEventListener('click', openLetter);
+
+function hearts() {
+  for (let i = 0; i < 9; i++) {
+    const h = document.createElement('span');
+
+    h.className = 'heart';
+    h.textContent = '♥';
+    h.style.left = (Math.random() * 100) + 'vw';
+    h.style.animationDelay = (Math.random() * 1.8) + 's';
+    h.style.fontSize = (12 + Math.random() * 16) + 'px';
+
+    document.body.appendChild(h);
+
+    setTimeout(() => h.remove(), 6500);
+  }
+}
+</script>
+
+</body>
+</html>
